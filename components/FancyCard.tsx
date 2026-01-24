@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginHorizontal: 8,
     marginVertical: 8,
-    width: 320,
+    width: 400,
     elevation: 6,
     shadowColor: '#000',
     shadowOffset: {
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 230,
     resizeMode: 'cover',
   },
   cardContent: {
