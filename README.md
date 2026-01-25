@@ -18,19 +18,6 @@ androidApp/
 └── [future projects]/      - Add new React Native projects here
 ```
 
-## 🚀 Current Projects
-
-### 1. demo
-A React Native application demonstrating various UI components including:
-- ActionCard
-- ContactList
-- ElevatedCards
-- FancyCard
-- FlatCards
-
-### 2. PasswordGenerator
-A React Native password generator application.
-
 ---
 
 ## 🛠️ Development Environment Setup
@@ -265,7 +252,7 @@ npm start -- --reset-cache
 cd /path/to/React-Native-App
 
 # Create a new React Native project
-npx react-native@latest init MyNewApp
+npx @react-native-community/cli init MyNewApp
 
 # The project will be created as a subdirectory
 # Navigate into it
@@ -285,7 +272,7 @@ npm run ios      # For iOS
 ### Method 2: With TypeScript Template
 
 ```bash
-npx react-native@latest init MyTypeScriptApp --template react-native-template-typescript
+npx @react-native-community/cli init MyTypeScriptApp --template react-native-template-typescript
 ```
 
 ### After Creating a New Project
