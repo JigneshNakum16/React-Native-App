@@ -9,15 +9,6 @@ This repository contains multiple React Native projects managed in a single repo
 - [React Native CLI](https://github.com/react-native-community/cli)
 - [React Documentation](https://react.dev/)
 
-## 📁 Project Structure
-
-```
-androidApp/
-├── demo/                   - React Native demo app with UI components
-├── PasswordGenerator/      - React Native password generator app
-└── [future projects]/      - Add new React Native projects here
-```
-
 ---
 
 ## 🛠️ Development Environment Setup
