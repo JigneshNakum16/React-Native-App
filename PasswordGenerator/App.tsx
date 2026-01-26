@@ -107,7 +107,6 @@ const App = () => {
             initialValues={{ passwordLength: '' }}
             validationSchema={passwordSchema}
             onSubmit={(values, { setSubmitting }) => {
-              console.log(values);
               generatePasswordString(Number(values.passwordLength));
               setSubmitting(false);
             }}
@@ -142,7 +141,10 @@ const App = () => {
                   )}
                 </View>
                 <View style={styles.checkboxSection}>
-                  <View style={styles.checkboxRow}>
+                  <TouchableOpacity
+                    style={styles.checkboxRow}
+                    onPress={() => setLowerCase(!lowerCase)}
+                    activeOpacity={0.7}>
                     <Text style={styles.checkboxLabel}>Include Lowercase</Text>
                     <BouncyCheckbox
                       useBuiltInState={false}
@@ -152,9 +154,12 @@ const App = () => {
                       size={28}
                       iconStyle={styles.checkboxIcon}
                     />
-                  </View>
+                  </TouchableOpacity>
 
-                  <View style={styles.checkboxRow}>
+                  <TouchableOpacity
+                    style={styles.checkboxRow}
+                    onPress={() => setUpperCase(!upperCase)}
+                    activeOpacity={0.7}>
                     <Text style={styles.checkboxLabel}>Include Uppercase</Text>
                     <BouncyCheckbox
                       useBuiltInState={false}
@@ -164,9 +169,12 @@ const App = () => {
                       size={28}
                       iconStyle={styles.checkboxIcon}
                     />
-                  </View>
+                  </TouchableOpacity>
 
-                  <View style={styles.checkboxRow}>
+                  <TouchableOpacity
+                    style={styles.checkboxRow}
+                    onPress={() => setNumbers(!numbers)}
+                    activeOpacity={0.7}>
                     <Text style={styles.checkboxLabel}>Include Numbers</Text>
                     <BouncyCheckbox
                       useBuiltInState={false}
@@ -176,9 +184,12 @@ const App = () => {
                       size={28}
                       iconStyle={styles.checkboxIcon}
                     />
-                  </View>
+                  </TouchableOpacity>
 
-                  <View style={styles.checkboxRow}>
+                  <TouchableOpacity
+                    style={styles.checkboxRow}
+                    onPress={() => setSymbols(!symbols)}
+                    activeOpacity={0.7}>
                     <Text style={styles.checkboxLabel}>Include Symbols</Text>
                     <BouncyCheckbox
                       useBuiltInState={false}
@@ -188,7 +199,7 @@ const App = () => {
                       size={28}
                       iconStyle={styles.checkboxIcon}
                     />
-                  </View>
+                  </TouchableOpacity>
                 </View>
 
                 <View style={styles.formActions}>
