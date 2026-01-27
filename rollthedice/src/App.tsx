@@ -109,7 +109,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   Pressable,
   Animated,
   Easing,
