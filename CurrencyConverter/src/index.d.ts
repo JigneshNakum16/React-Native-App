@@ -1,4 +1,4 @@
-interface Currency {
+export interface Currency {
   name: string;
   value: number;
   flag: string;
