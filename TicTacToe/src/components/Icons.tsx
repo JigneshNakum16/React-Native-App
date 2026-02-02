@@ -10,7 +10,7 @@ const Icons = ({ name }: { name: string }) => {
     return <Icon name="circle-thin" size={44} color="#F7CD2E" />;
   }
 
-  return null; // 👈 IMPORTANT (no pencil)
+  return <Icon name="pencil" size={44} color="#FFFFFF" />;
 };
 
 export default Icons;

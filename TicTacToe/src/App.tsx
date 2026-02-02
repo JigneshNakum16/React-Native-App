@@ -170,95 +170,97 @@ export default App;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F6F8',
+    backgroundColor: '#0B0B0B', // TRUE black
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: '700',
+    fontSize: 30,
+    fontWeight: '800',
     textAlign: 'center',
     marginTop: 20,
-    color: '#2C3335',
+    color: '#EDEDED',
+    letterSpacing: 1,
   },
 
   playerInfo: {
     height: 56,
     marginHorizontal: 16,
     marginVertical: 14,
-    borderRadius: 8,
+    borderRadius: 10,
 
     justifyContent: 'center',
     alignItems: 'center',
 
     shadowColor: '#000',
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 6,
   },
 
   playerX: {
-    backgroundColor: '#38CC77',
+    backgroundColor: '#2ECC71', // vibrant green
   },
 
   playerO: {
-    backgroundColor: '#F7CD2E',
+    backgroundColor: '#F1C40F', // warm yellow
   },
 
   gameTurnTxt: {
     fontSize: 20,
-    fontWeight: '600',
-    color: '#FFFFFF',
+    fontWeight: '700',
+    color: '#0B0B0B',
   },
 
   grid: {
-    marginTop: 20,
-    marginHorizontal: 12,
+    marginTop: 24,
     alignSelf: 'center',
   },
 
   winnerInfo: {
     marginHorizontal: 16,
     marginVertical: 16,
-    paddingVertical: 14,
-    borderRadius: 10,
-    backgroundColor: '#38CC77',
+    paddingVertical: 16,
+    borderRadius: 14,
+    backgroundColor: '#2ECC71',
 
     alignItems: 'center',
     justifyContent: 'center',
 
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowColor: '#2ECC71',
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 10,
   },
 
   winnerTxt: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: '800',
+    color: '#0B0B0B',
     textTransform: 'capitalize',
-    marginBottom: 10,
+    marginBottom: 12,
   },
 
   gameBtn: {
-    marginTop: 20,
+    marginTop: 24,
     marginHorizontal: 40,
-    paddingVertical: 12,
-    borderRadius: 10,
-    backgroundColor: '#8D3DAF',
+    paddingVertical: 14,
+    borderRadius: 14,
+    backgroundColor: '#8E44AD',
 
     alignItems: 'center',
     justifyContent: 'center',
 
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    shadowColor: '#8E44AD',
+    shadowOpacity: 0.6,
+    shadowRadius: 10,
+    elevation: 8,
   },
 
   gameBtnText: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#FFFFFF',
+    letterSpacing: 0.6,
   },
 });
+

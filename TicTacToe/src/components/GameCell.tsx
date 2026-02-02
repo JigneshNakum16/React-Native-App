@@ -44,19 +44,20 @@ export default GameCell;
 
 const styles = StyleSheet.create({
   card: {
-    height: 110,
+    height: 115,
     width: '33.33%',
     borderWidth: 1,
-    borderColor: '#444',
-    backgroundColor: '#FFF',
+    borderColor: '#2F2F2F',
+    backgroundColor: '#121212',
 
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   highlightCell: {
-    backgroundColor: '#D6FFEA',
-    borderColor: '#38CC77',
+    backgroundColor: '#103B2A',
+    borderColor: '#2ECC71',
     borderWidth: 2,
   },
 });
+
