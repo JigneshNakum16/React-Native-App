@@ -16,7 +16,9 @@ const ControlCenter = () => {
   };
   const togglePlayback = async (playback: State) => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
-    if (currentTrack == null) {
+    console.log("playback", playback);
+    console.log("currentTrack", currentTrack);
+    if (currentTrack !== null) {
       if (playback === State.Paused || playback === State.Ready) {
         await TrackPlayer.play();
       } else {
@@ -36,7 +38,6 @@ const ControlCenter = () => {
         />
       </Pressable>
       <Pressable onPress={() => togglePlayback(playbackState)}>
-        {' '}
         <Icons
           style={styles.icon}
           name={playbackState === State.Playing ? 'pause' : 'play-arrow'}

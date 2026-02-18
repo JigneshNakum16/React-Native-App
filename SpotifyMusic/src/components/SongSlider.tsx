@@ -14,15 +14,14 @@ const SongSlider = () => {
         value={position}
         minimumTrackTintColor="#fff"
         maximumTrackTintColor="#d9d9d9"
-        thumbStyle={{width: 12, height: 12}}
         thumbTintColor="#fff"
       />
       <View style={styles.timeContainer}>
         <Text style={styles.time}>
-          {new Date(position * 1000).toISOString().substr(15, 19)}
+          {new Date(position * 1000).toISOString().substring(14, 19)}
         </Text>
         <Text style={styles.time}>
-          {new Date((duration - position) * 1000).toISOString().substr(15, 19)}
+          {new Date((duration - position) * 1000).toISOString().substring(14, 19)}
         </Text>
       </View>
     </View>

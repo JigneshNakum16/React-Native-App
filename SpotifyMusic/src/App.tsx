@@ -3,16 +3,18 @@ import {
   SafeAreaView,
   StatusBar,
   ActivityIndicator,
-  Text,
   StyleSheet,
+  View,
 } from 'react-native';
 import { setupPlayer, addTrack } from '../musicPlayerServices';
+import MusicPlayer from './screens/MusicPlayer';
 
 export default function App() {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   async function setup() {
     const isSetup = await setupPlayer();
+    console.log("isSetup", isSetup);
     if (isSetup) {
       await addTrack();
     }
@@ -30,10 +32,10 @@ export default function App() {
     );
   }
   return (
-    <SafeAreaView>
+    <View style={styles.container}>
       <StatusBar />
-      <Text style={styles.container}>Spotify Music Player</Text>
-    </SafeAreaView>
+      <MusicPlayer />
+    </View>
   );
 }
 
