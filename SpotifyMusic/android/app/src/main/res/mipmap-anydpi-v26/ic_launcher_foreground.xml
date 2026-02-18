@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+  <group
+      android:scaleX="0.5"
+      android:scaleY="0.5"
+      android:translateX="27"
+      android:translateY="27">
+    <!-- Music Note 1 -->
+    <path
+        android:pathData="M20,30 L55,30 L55,65 L20,65 Z"
+        android:fillColor="#1DB954"/>
+    <!-- Music Note 2 -->
+    <path
+        android:pathData="M65,25 L105,25 L105,75 L65,75 Z"
+        android:fillColor="#1DB954"/>
+    <!-- Music Note 3 -->
+    <path
+        android:pathData="M115,35 L145,35 L145,75 L115,75 Z"
+        android:fillColor="#1DB954"/>
+    <!-- Sound Waves -->
+    <path
+        android:pathData="M35,90 A5,5 0 1,1 45,90 A5,5 0 1,1 35,90"
+        android:fillColor="#1DB954"/>
+    <path
+        android:pathData="M54,100 A6,6 0 1,1 66,100 A6,6 0 1,1 54,100"
+        android:fillColor="#1DB954"/>
+    <path
+        android:pathData="M76,90 A4,4 0 1,1 84,90 A4,4 0 1,1 76,90"
+        android:fillColor="#1DB954"/>
+    <path
+        android:pathData="M95,100 A5,5 0 1,1 105,100 A5,5 0 1,1 95,100"
+        android:fillColor="#1DB954"/>
+    <path
+        android:pathData="M116,93 A4,4 0 1,1 124,93 A4,4 0 1,1 116,93"
+        android:fillColor="#1DB954"/>
+  </group>
+</vector>

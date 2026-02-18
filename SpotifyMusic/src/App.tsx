@@ -1,19 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  SafeAreaView,
-  StatusBar,
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { StyleSheet, View, StatusBar, Text } from 'react-native';
 import { setupPlayer, addTrack } from '../musicPlayerServices';
 import MusicPlayer from './screens/MusicPlayer';
+import SplashScreen from './components/SplashScreen';
 
 type SetupStatus = 'loading' | 'success' | 'error';
 
 export default function App() {
   const [setupStatus, setSetupStatus] = useState<SetupStatus>('loading');
+  const [showSplash, setShowSplash] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const setup = useCallback(async () => {
@@ -37,24 +32,24 @@ export default function App() {
     setup();
   }, [setup]);
 
-  if (setupStatus === 'loading') {
-    return (
-      <SafeAreaView style={styles.loadingContainer}>
-        <StatusBar barStyle="light-content" />
-        <ActivityIndicator size="large" color="#1DB954" />
-        <Text style={styles.loadingText}>Loading Music Player...</Text>
-      </SafeAreaView>
-    );
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+  };
+
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
   if (setupStatus === 'error') {
     return (
-      <SafeAreaView style={styles.errorContainer}>
-        <StatusBar barStyle="light-content" />
-        <Text style={styles.errorTitle}>Oops!</Text>
-        <Text style={styles.errorMessage}>{errorMsg || 'Something went wrong'}</Text>
-        <Text style={styles.errorHint}>Please restart the app</Text>
-      </SafeAreaView>
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#000" />
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorTitle}>Oops!</Text>
+          <Text style={styles.errorMessage}>{errorMsg || 'Something went wrong'}</Text>
+          <Text style={styles.errorHint}>Please restart the app</Text>
+        </View>
+      </View>
     );
   }
 
@@ -71,23 +66,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#001d23',
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#001d23',
-  },
-  loadingText: {
-    marginTop: 16,
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '500',
-  },
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#001d23',
+    backgroundColor: '#000',
     padding: 24,
   },
   errorTitle: {
