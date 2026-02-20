@@ -12,7 +12,7 @@ import Separator from '../components/Separator';
 import { PRODUCTS_LIST } from '../data/contants';
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-const Home = ({ props }: HomeProps) => {
+const Home = ({ navigation }: HomeProps) => {
   return (
     <View style={styles.container}>
       <Text>Home</Text>
@@ -22,7 +22,7 @@ const Home = ({ props }: HomeProps) => {
         ItemSeparatorComponent={Separator}
         renderItem={({ item }) => (
           <Pressable
-            onPress={() => props.native('Details', { product: item })}
+            onPress={() => navigation.navigate('Details', { product: item })}
           >
             <ProductItem product={item} />
           </Pressable>
