@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
 import type { Product } from '../index';
 import { useCartStore, useWishlistStore } from '../store';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface ProductCardProps {
   product: Product;
@@ -26,6 +29,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
 
   const inWishlist = isInWishlist(product.id);
   const inCart = isInCart(product.id);
+
+  // Responsive values
+  const isSmallDevice = SCREEN_WIDTH < 375;
+  const isTablet = SCREEN_WIDTH >= 768;
+  const imageSize = isTablet ? 140 : isSmallDevice ? 100 : 120;
+  const iconSize = isTablet ? 24 : 20;
+  const paddingValue = isTablet ? spacing.lg : spacing.md;
+  const nameFontSize = isSmallDevice ? 13 : fontSize.sm;
+  const priceFontSize = isSmallDevice ? 15 : fontSize.md;
+  const buttonFontSize = isSmallDevice ? 11 : fontSize.sm;
 
   const handlePressIn = () => {
     Animated.spring(animatedValue, {
@@ -89,16 +102,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
         style={styles.card}
       >
         <View style={styles.imageContainer}>
-          <Image source={{ uri: product.imageUrl }} style={styles.image} />
+          <Image
+            source={{ uri: product.imageUrl }}
+            style={[styles.image, { width: imageSize * 1.2, height: imageSize * 1.6 }]}
+          />
           <TouchableOpacity
-            style={styles.wishlistButton}
+            style={[styles.wishlistButton, { width: iconSize + 16, height: iconSize + 16 }]}
             onPress={handleWishlistPress}
             activeOpacity={0.7}
           >
             <Animated.View style={{ transform: [{ scale: heartScale }] }}>
               <Icon
                 name={inWishlist ? 'heart' : 'heart-outline'}
-                size={20}
+                size={iconSize}
                 color={inWishlist ? colors.heartColor : colors.textSecondary}
               />
             </Animated.View>
@@ -113,17 +129,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
           )}
         </View>
 
-        <View style={styles.content}>
-          <Text style={styles.name} numberOfLines={2}>
+        <View style={[styles.content, { padding: isSmallDevice ? spacing.sm : paddingValue }]}>
+          <Text style={[styles.name, { fontSize: nameFontSize, minHeight: isSmallDevice ? 32 : 36 }]} numberOfLines={2}>
             {product.name}
           </Text>
 
           <View style={styles.ratingContainer}>
             <View style={styles.rating}>
-              <Icon name="star" size={12} color={colors.background} />
-              <Text style={styles.ratingText}>{product.rating.toFixed(1)}</Text>
+              <Icon name="star" size={isSmallDevice ? 10 : 12} color={colors.background} />
+              <Text style={[styles.ratingText, { fontSize: isSmallDevice ? 9 : 10 }]}>
+                {product.rating.toFixed(1)}
+              </Text>
             </View>
-            <Text style={styles.ratingCount}>
+            <Text style={[styles.ratingCount, { fontSize: isSmallDevice ? 10 : 11 }]}>
               ({product.ratingCount > 1000
                 ? `${(product.ratingCount / 1000).toFixed(1)}k`
                 : product.ratingCount})
@@ -131,10 +149,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
           </View>
 
           <View style={styles.priceContainer}>
-            <Text style={styles.originalPrice}>
+            <Text style={[styles.originalPrice, { fontSize: isSmallDevice ? 11 : fontSize.sm }]}>
               ₹{product.originalPrice.toLocaleString()}
             </Text>
-            <Text style={styles.discountPrice}>
+            <Text style={[styles.discountPrice, { fontSize: priceFontSize }]}>
               ₹{product.discountPrice.toLocaleString()}
             </Text>
           </View>
@@ -146,17 +164,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
           >
             <Icon
               name={inCart ? 'cart' : 'cart-outline'}
-              size={16}
+              size={isSmallDevice ? 14 : 16}
               color={colors.background}
               style={styles.cartIcon}
             />
             <Text
               style={[
                 styles.addButtonText,
+                { fontSize: buttonFontSize },
                 inCart ? styles.addButtonTextInCart : null,
               ]}
             >
-              {inCart ? 'ADD MORE' : 'ADD TO CART'}
+              {isSmallDevice ? (inCart ? 'MORE' : 'ADD') : inCart ? 'ADD MORE' : 'ADD TO CART'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -167,7 +186,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: spacing.md,
+    marginBottom: 12,
   },
   card: {
     backgroundColor: colors.background,
@@ -184,19 +203,15 @@ const styles = StyleSheet.create({
     backgroundColor: colors.cardBackground,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.lg,
+    paddingVertical: 16,
   },
   image: {
-    width: 120,
-    height: 160,
     resizeMode: 'contain',
   },
   wishlistButton: {
     position: 'absolute',
-    top: spacing.sm,
-    right: spacing.sm,
-    width: 36,
-    height: 36,
+    top: 8,
+    right: 8,
     borderRadius: 18,
     backgroundColor: colors.background,
     alignItems: 'center',
@@ -209,10 +224,10 @@ const styles = StyleSheet.create({
   },
   discountBadge: {
     position: 'absolute',
-    top: spacing.sm,
-    left: spacing.sm,
+    top: 8,
+    left: 8,
     backgroundColor: colors.primary,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: borderRadius.sm,
     flexDirection: 'row',
@@ -220,69 +235,63 @@ const styles = StyleSheet.create({
   },
   discountText: {
     color: colors.background,
-    fontSize: fontSize.xs,
+    fontSize: 11,
     fontWeight: '700',
   },
   discountOff: {
     color: colors.background,
-    fontSize: 8,
+    fontSize: 7,
     fontWeight: '600',
     marginLeft: 2,
   },
   content: {
-    padding: spacing.sm,
+    padding: 12,
   },
   name: {
-    fontSize: fontSize.sm,
     fontWeight: '600',
     color: colors.text,
-    marginBottom: spacing.sm,
-    minHeight: 36,
+    marginBottom: 8,
   },
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: 8,
   },
   rating: {
     backgroundColor: colors.ratingBackground,
-    paddingHorizontal: spacing.sm,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
-    marginRight: spacing.xs,
+    marginRight: 6,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
   },
   ratingText: {
     color: colors.background,
-    fontSize: fontSize.xs,
     fontWeight: '600',
   },
   ratingCount: {
-    fontSize: fontSize.xs,
     color: colors.textSecondary,
   },
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: 8,
   },
   originalPrice: {
-    fontSize: fontSize.sm,
     fontWeight: '500',
     color: colors.textSecondary,
     textDecorationLine: 'line-through',
-    marginRight: spacing.xs,
+    marginRight: 6,
   },
   discountPrice: {
-    fontSize: fontSize.md,
     fontWeight: '700',
     color: colors.primary,
   },
   addButton: {
     backgroundColor: colors.primary,
-    paddingVertical: spacing.sm,
+    paddingVertical: 8,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     flexDirection: 'row',
@@ -294,7 +303,6 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: colors.background,
-    fontSize: fontSize.sm,
     fontWeight: '600',
   },
   addButtonTextInCart: {

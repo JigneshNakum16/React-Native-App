@@ -6,11 +6,14 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
 import { CartItem as CartItemType } from '../store';
 import QuantitySelector from './QuantitySelector';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface CartItemProps {
   item: CartItemType;
@@ -27,6 +30,13 @@ const CartItemComponent: React.FC<CartItemProps> = ({
 }) => {
   const slideAnim = React.useRef(new Animated.Value(0)).current;
   const [isDeleting, setIsDeleting] = React.useState(false);
+
+  // Responsive values
+  const isSmallDevice = SCREEN_WIDTH < 375;
+  const isTablet = SCREEN_WIDTH >= 768;
+  const imageWidth = isTablet ? 110 : isSmallDevice ? 75 : 90;
+  const imageHeight = isTablet ? 130 : isSmallDevice ? 95 : 110;
+  const paddingValue = isSmallDevice ? spacing.sm : spacing.md;
 
   const handleRemove = () => {
     setIsDeleting(true);
@@ -47,12 +57,18 @@ const CartItemComponent: React.FC<CartItemProps> = ({
     <Animated.View
       style={[styles.container, { transform: [{ translateX: slideAnim }] }]}
     >
-      <View style={styles.content}>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+      <View style={[styles.content, { padding: paddingValue }]}>
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={[styles.image, { width: imageWidth, height: imageHeight }]}
+        />
 
         <View style={styles.details}>
           <View style={styles.headerRow}>
-            <Text style={styles.name} numberOfLines={2}>
+            <Text
+              style={[styles.name, { fontSize: isSmallDevice ? 13 : fontSize.sm }]}
+              numberOfLines={2}
+            >
               {item.name}
             </Text>
             <TouchableOpacity
@@ -60,7 +76,11 @@ const CartItemComponent: React.FC<CartItemProps> = ({
               onPress={handleRemove}
               activeOpacity={0.7}
             >
-              <Icon name="close-circle" size={20} color={colors.textSecondary} />
+              <Icon
+                name="close-circle"
+                size={isSmallDevice ? 18 : 20}
+                color={colors.textSecondary}
+              />
             </TouchableOpacity>
           </View>
 
@@ -69,21 +89,25 @@ const CartItemComponent: React.FC<CartItemProps> = ({
               <Icon name="star" size={10} color={colors.background} />
               <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
             </View>
-            <Text style={styles.ratingCount}>({item.ratingCount})</Text>
+            <Text style={[styles.ratingCount, { fontSize: isSmallDevice ? 10 : 11 }]}>
+              ({item.ratingCount})
+            </Text>
           </View>
 
           <View style={styles.priceAndQuantityRow}>
             <View style={styles.priceContainer}>
-              <Text style={styles.price}>
+              <Text style={[styles.price, { fontSize: isSmallDevice ? 15 : fontSize.md }]}>
                 ₹{item.discountPrice.toLocaleString()}
               </Text>
-              <Text style={styles.originalPrice}>
+              <Text style={[styles.originalPrice, { fontSize: isSmallDevice ? 11 : fontSize.sm }]}>
                 ₹{item.originalPrice.toLocaleString()}
               </Text>
             </View>
 
             <View style={styles.quantityContainer}>
-              <Text style={styles.quantityLabel}>Qty: </Text>
+              <Text style={[styles.quantityLabel, { fontSize: isSmallDevice ? 12 : fontSize.sm }]}>
+                Qty:{' '}
+              </Text>
               <QuantitySelector
                 quantity={item.quantity}
                 onIncrease={() => onUpdateQuantity(item.quantity + 1)}
@@ -101,7 +125,7 @@ const CartItemComponent: React.FC<CartItemProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background,
-    marginBottom: spacing.sm,
+    marginBottom: 12,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
     elevation: 3,
@@ -112,14 +136,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flexDirection: 'row',
-    padding: spacing.md,
     backgroundColor: colors.background,
   },
   image: {
-    width: 90,
-    height: 110,
     resizeMode: 'contain',
-    marginRight: spacing.md,
+    marginRight: 12,
   },
   details: {
     flex: 1,
@@ -128,14 +149,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: spacing.xs,
+    marginBottom: 6,
   },
   name: {
-    fontSize: fontSize.sm,
     fontWeight: '600',
     color: colors.text,
     flex: 1,
-    marginRight: spacing.xs,
+    marginRight: 6,
   },
   removeButton: {
     padding: 2,
@@ -143,14 +163,14 @@ const styles = StyleSheet.create({
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.xs,
+    marginBottom: 6,
   },
   rating: {
     backgroundColor: colors.ratingBackground,
-    paddingHorizontal: spacing.xs,
+    paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
-    marginRight: spacing.xs,
+    marginRight: 6,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 2,
@@ -161,7 +181,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   ratingCount: {
-    fontSize: fontSize.xs,
     color: colors.textSecondary,
   },
   priceAndQuantityRow: {
@@ -173,20 +192,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   price: {
-    fontSize: fontSize.md,
     fontWeight: '700',
     color: colors.primary,
-    marginRight: spacing.xs,
+    marginRight: 6,
   },
   originalPrice: {
-    fontSize: fontSize.sm,
     color: colors.textSecondary,
     textDecorationLine: 'line-through',
   },
   quantityLabel: {
-    fontSize: fontSize.sm,
     color: colors.textSecondary,
-    marginRight: spacing.xs,
+    marginRight: 4,
   },
   quantityContainer: {
     flexDirection: 'row',

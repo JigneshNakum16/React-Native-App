@@ -7,6 +7,7 @@ import {
   RefreshControl,
   TouchableOpacity,
   Animated,
+  Dimensions,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -18,6 +19,8 @@ import SearchBar from '../components/SearchBar';
 import CategoryChip from '../components/CategoryChip';
 import { useFilterStore, useCartStore, useWishlistStore } from '../store';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
 type HomeProps = NativeStackScreenProps<any, 'Home'>;
 
 const Home = ({ navigation }: HomeProps) => {
@@ -28,6 +31,12 @@ const Home = ({ navigation }: HomeProps) => {
 
   const [refreshing, setRefreshing] = React.useState(false);
   const scrollY = React.useRef(new Animated.Value(0)).current;
+
+  // Responsive values
+  const isSmallDevice = SCREEN_WIDTH < 375;
+  const isTablet = SCREEN_WIDTH >= 768;
+  const cardWidth = isTablet ? '31%' : '48%';
+  const gapValue = isSmallDevice ? 10 : 12;
 
   useEffect(() => {
     initializeCart(PRODUCTS_LIST);
@@ -58,7 +67,7 @@ const Home = ({ navigation }: HomeProps) => {
   const cartCount = getCartItemsCount();
 
   const renderProduct = ({ item }: { item: Product }) => (
-    <View style={styles.productCardContainer}>
+    <View style={[styles.productCardContainer, { width: cardWidth }]}>
       <ProductCard
         product={item}
         onPress={() => (navigation as any).navigate('Details', { product: item })}
@@ -68,9 +77,11 @@ const Home = ({ navigation }: HomeProps) => {
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Icon name="search-outline" size={64} color={colors.border} />
-      <Text style={styles.emptyTitle}>No products found</Text>
-      <Text style={styles.emptySubtitle}>
+      <Icon name="search-outline" size={isSmallDevice ? 56 : 64} color={colors.border} />
+      <Text style={[styles.emptyTitle, { fontSize: isSmallDevice ? 18 : fontSize.xl }]}>
+        No products found
+      </Text>
+      <Text style={[styles.emptySubtitle, { fontSize: isSmallDevice ? 14 : fontSize.md }]}>
         {searchQuery || selectedCategory !== 'All'
           ? 'Try adjusting your filters'
           : 'Check back later for new products'}
@@ -84,7 +95,9 @@ const Home = ({ navigation }: HomeProps) => {
           }}
         >
           <Icon name="refresh-outline" size={18} color={colors.background} style={{ marginRight: 6 }} />
-          <Text style={styles.clearFiltersText}>Clear Filters</Text>
+          <Text style={[styles.clearFiltersText, { fontSize: isSmallDevice ? 13 : fontSize.sm }]}>
+            Clear Filters
+          </Text>
         </TouchableOpacity>
       )}
     </View>
@@ -108,9 +121,9 @@ const Home = ({ navigation }: HomeProps) => {
         data={filteredProducts}
         renderItem={renderProduct}
         keyExtractor={(item) => item.id}
-        numColumns={2}
-        columnWrapperStyle={styles.row}
-        contentContainerStyle={styles.listContent}
+        numColumns={isTablet ? 3 : 2}
+        columnWrapperStyle={[styles.row, { gap: gapValue }]}
+        contentContainerStyle={[styles.listContent, { paddingHorizontal: isSmallDevice ? 12 : 16 }]}
         ListEmptyComponent={renderEmptyState}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -130,10 +143,12 @@ const Home = ({ navigation }: HomeProps) => {
               },
             ]}
           >
-            <View style={styles.headerTop}>
-              <Text style={styles.headerTitle}>ShopHub</Text>
+            <View style={[styles.headerTop, { paddingHorizontal: isSmallDevice ? 16 : 20 }]}>
+              <Text style={[styles.headerTitle, { fontSize: isSmallDevice ? 26 : fontSize.xxl }]}>
+                ShopHub
+              </Text>
               <TouchableOpacity style={styles.notificationButton}>
-                <Icon name="notifications-outline" size={24} color={colors.text} />
+                <Icon name="notifications-outline" size={isSmallDevice ? 22 : 24} color={colors.text} />
               </TouchableOpacity>
             </View>
             <SearchBar
@@ -146,8 +161,8 @@ const Home = ({ navigation }: HomeProps) => {
               selectedCategory={selectedCategory}
               onSelectCategory={setSelectedCategory}
             />
-            <View style={styles.resultsHeader}>
-              <Text style={styles.resultsCount}>
+            <View style={[styles.resultsHeader, { paddingHorizontal: isSmallDevice ? 12 : 16 }]}>
+              <Text style={[styles.resultsCount, { fontSize: isSmallDevice ? 14 : fontSize.md }]}>
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'}
               </Text>
               <TouchableOpacity style={styles.filterButton}>
@@ -161,13 +176,15 @@ const Home = ({ navigation }: HomeProps) => {
 
       {cartCount > 0 && (
         <TouchableOpacity
-          style={styles.floatingCartButton}
+          style={[styles.floatingCartButton, { bottom: isSmallDevice ? 70 : 80 }]}
           onPress={() => (navigation as any).navigate('CartTab')}
           activeOpacity={0.8}
         >
-          <Icon name="cart" size={24} color={colors.background} />
+          <Icon name="cart" size={isSmallDevice ? 22 : 24} color={colors.background} />
           <View style={styles.cartBadge}>
-            <Text style={styles.cartBadgeText}>{cartCount}</Text>
+            <Text style={[styles.cartBadgeText, { fontSize: isSmallDevice ? 10 : 11 }]}>
+              {cartCount}
+            </Text>
           </View>
         </TouchableOpacity>
       )}
@@ -188,79 +205,71 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
+    paddingVertical: 16,
+    paddingBottom: 12,
   },
   headerTitle: {
-    fontSize: fontSize.xxl,
     fontWeight: '800',
     color: colors.primary,
     letterSpacing: -0.5,
   },
   notificationButton: {
-    padding: spacing.xs,
+    padding: 4,
   },
   listContent: {
-    padding: spacing.md,
     paddingTop: 0,
+    paddingBottom: 20,
   },
   row: {
     justifyContent: 'space-between',
+  },
+  productCardContainer: {
+    marginBottom: 12,
   },
   resultsHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: 12,
   },
   resultsCount: {
-    fontSize: fontSize.md,
-    color: colors.text,
     fontWeight: '600',
+    color: colors.text,
   },
   filterButton: {
-    padding: spacing.xs,
-  },
-  productCardContainer: {
-    width: '48%',
+    padding: 4,
   },
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: spacing.xxl * 3,
+    paddingVertical: 80,
   },
   emptyTitle: {
-    fontSize: fontSize.xl,
     fontWeight: '700',
     color: colors.text,
-    marginBottom: spacing.sm,
-    marginTop: spacing.lg,
+    marginBottom: 8,
+    marginTop: 20,
   },
   emptySubtitle: {
-    fontSize: fontSize.md,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: 20,
   },
   clearFiltersButton: {
     backgroundColor: colors.primary,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    borderRadius: borderRadius.round,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 999,
     flexDirection: 'row',
     alignItems: 'center',
   },
   clearFiltersText: {
     color: colors.background,
-    fontSize: fontSize.sm,
     fontWeight: '600',
   },
   floatingCartButton: {
     position: 'absolute',
-    bottom: spacing.xxl + 60,
-    right: spacing.md,
+    right: 16,
     backgroundColor: colors.primary,
     width: 56,
     height: 56,
@@ -288,7 +297,6 @@ const styles = StyleSheet.create({
   },
   cartBadgeText: {
     color: colors.background,
-    fontSize: 11,
     fontWeight: '700',
     paddingHorizontal: 5,
   },

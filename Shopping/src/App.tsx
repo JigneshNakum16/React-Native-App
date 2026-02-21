@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar, Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -15,6 +15,8 @@ import { useCartStore, useWishlistStore } from './store';
 import { PRODUCTS_LIST } from './data/contants';
 import { colors } from './theme/colors';
 import type { Product } from './index';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Screens
 import Home from './screens/Home';
@@ -110,13 +112,20 @@ const TabNavigator = () => {
   const cartCount = useCartStore((state) => state.getCartItemsCount());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
 
+  // Responsive values
+  const isSmallDevice = SCREEN_WIDTH < 375;
+  const tabBarHeight = isSmallDevice ? 60 : 65;
+  const iconSize = isSmallDevice ? 20 : 22;
+  const labelFontSize = isSmallDevice ? 11 : 12;
+  const badgeFontSize = isSmallDevice ? 9 : 10;
+
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.tabBarInactive,
         tabBarStyle: {
-          height: 65,
+          height: tabBarHeight,
           paddingBottom: 8,
           paddingTop: 8,
           borderTopWidth: 1,
@@ -128,7 +137,7 @@ const TabNavigator = () => {
           shadowRadius: 8,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: labelFontSize,
           fontWeight: '600',
         },
         tabBarIconStyle: {
@@ -156,11 +165,11 @@ const TabNavigator = () => {
           tabBarBadgeStyle: {
             backgroundColor: colors.error,
             color: colors.background,
-            fontSize: 10,
+            fontSize: badgeFontSize,
             fontWeight: '700',
           },
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="cart" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="cart" color={color} size={iconSize} />
           ),
         }}
       />
@@ -173,11 +182,11 @@ const TabNavigator = () => {
           tabBarBadgeStyle: {
             backgroundColor: colors.error,
             color: colors.background,
-            fontSize: 10,
+            fontSize: badgeFontSize,
             fontWeight: '700',
           },
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="heart" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="heart" color={color} size={iconSize} />
           ),
         }}
       />
@@ -186,8 +195,8 @@ const TabNavigator = () => {
         component={ProfileStackNavigator}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="user" color={color} size={size} />
+          tabBarIcon: ({ color }) => (
+            <TabIcon name="user" color={color} size={iconSize} />
           ),
         }}
       />
