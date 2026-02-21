@@ -1,15 +1,15 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * ShopHub - React Native Shopping App
  *
  * @format
  */
 
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import BootSplash from 'react-native-bootsplash';
 import { useCartStore, useWishlistStore } from './store';
 import { PRODUCTS_LIST } from './data/contants';
 import { colors } from './theme/colors';
@@ -219,16 +219,44 @@ const TabIcon: React.FC<TabIconProps> = ({ name, color, focused }) => {
 };
 
 function App() {
+  const [isAppReady, setIsAppReady] = useState(false);
   const { initializeCart } = useCartStore();
   const { initializeWishlist } = useWishlistStore();
 
   useEffect(() => {
-    initializeCart(PRODUCTS_LIST);
-    initializeWishlist();
+    async function prepare() {
+      try {
+        // Initialize stores
+        await initializeCart(PRODUCTS_LIST);
+        await initializeWishlist();
+      } catch (e) {
+        console.warn('Error preparing app:', e);
+      } finally {
+        setIsAppReady(true);
+      }
+    }
+
+    prepare();
   }, []);
+
+  useEffect(() => {
+    if (isAppReady) {
+      // Hide the splash screen after app is ready
+      const hideTimer = setTimeout(() => {
+        BootSplash.hide({ fade: true });
+      }, 300);
+
+      return () => clearTimeout(hideTimer);
+    }
+  }, [isAppReady]);
+
+  if (!isAppReady) {
+    return null;
+  }
 
   return (
     <NavigationContainer>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <TabNavigator />
     </NavigationContainer>
   );

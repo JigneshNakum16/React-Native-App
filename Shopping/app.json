@@ -1,4 +1,22 @@
 {
   "name": "Shopping",
-  "displayName": "Shopping"
+  "displayName": "ShopHub",
+  "react-native-bootsplash": {
+    "assets": [
+      {
+        "path": "assets/bootsplash/logo.png",
+        "width": 100
+      }
+    ],
+    "android": {
+      "backgroundColor": "#6C5CE7",
+      "drawableName": "bootsplash_logo"
+    },
+    "ios": {
+      "backgroundColor": "#6C5CE7"
+    },
+    "web": {
+      "backgroundColor": "#6C5CE7"
+    }
+  }
 }

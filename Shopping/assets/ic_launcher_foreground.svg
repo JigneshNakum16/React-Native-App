@@ -1,0 +1,23 @@
+<svg width="432" height="432" viewBox="0 0 432 432" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shopping Bag Icon for Android Adaptive Icon -->
+  <g transform="translate(216, 216)">
+    <!-- Bag Body -->
+    <path d="M-90 -80 H90 L105 80 C107 110 85 130 55 130 H-55 C-85 130 -107 110 -105 80 L-90 -80 Z"
+          fill="#FFFFFF" filter="url(#shadow)"/>
+
+    <!-- Bag Handle -->
+    <path d="M-55 -80 V-110 C-55 -140 -30 -165 0 -165 C30 -165 55 -140 55 -110 V-80"
+          stroke="#FFFFFF" stroke-width="20" stroke-linecap="round" fill="none"/>
+
+    <!-- Circle decorations -->
+    <circle cx="-28" cy="15" r="12" fill="#6C5CE7"/>
+    <circle cx="28" cy="15" r="12" fill="#6C5CE7"/>
+  </g>
+
+  <!-- Shadow Definition -->
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+</svg>

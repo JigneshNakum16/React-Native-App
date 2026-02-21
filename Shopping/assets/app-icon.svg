@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background - Gradient -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6C5CE7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A29BFE;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#grad)"/>
+
+  <!-- Shopping Bag Icon - Centered -->
+  <g transform="translate(512, 512)">
+    <!-- Bag Body -->
+    <path d="M-140 -120 H140 L160 120 C163.5 158 132 190 94 190 H-94 C-132 190 -163.5 158 -160 120 L-140 -120 Z"
+          fill="#FFFFFF" filter="url(#shadow)"/>
+
+    <!-- Bag Handle -->
+    <path d="M-90 -120 V-170 C-90 -212.5 -55.5 -247 0 -247 C55.5 -247 90 -212.5 90 -170 V-120"
+          stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" fill="none"/>
+
+    <!-- Circle decorations -->
+    <circle cx="-45" cy="20" r="18" fill="#6C5CE7"/>
+    <circle cx="45" cy="20" r="18" fill="#6C5CE7"/>
+  </g>
+
+  <!-- Shadow Definition -->
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+</svg>

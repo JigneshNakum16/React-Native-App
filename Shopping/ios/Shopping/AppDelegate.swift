@@ -2,6 +2,7 @@ import UIKit
 import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
+import RNBootSplash
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       withModuleName: "Shopping",
       in: window,
       launchOptions: launchOptions
+    )
+
+    // Initialize BootSplash
+    RNBootSplash.initWithStoryboard(
+      "BootSplash",
+      rootView: window!.rootViewController!.view
     )
 
     return true

@@ -1,0 +1,26 @@
+<svg width="384" height="384" viewBox="0 0 384 384" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="384" height="384" rx="48" fill="#6C5CE7"/>
+
+  <!-- Shopping Bag Icon -->
+  <g filter="url(#shadow)">
+    <!-- Bag Body -->
+    <path d="M120 140 H264 L276 284 C277.5 301.5 263.5 316 246 316 H138 C120.5 316 106.5 301.5 108 284 L120 140 Z"
+          fill="#FFFFFF" stroke="#FFFFFF" stroke-width="4"/>
+
+    <!-- Bag Handle -->
+    <path d="M148 140 V108 C148 80.3854 170.385 58 198 58 C225.615 58 248 80.3854 248 108 V140"
+          stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" fill="none"/>
+
+    <!-- Shopping Cart Symbol inside -->
+    <circle cx="166" cy="220" r="12" fill="#6C5CE7"/>
+    <circle cx="218" cy="220" r="12" fill="#6C5CE7"/>
+  </g>
+
+  <!-- Shadow Definition -->
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+</svg>
