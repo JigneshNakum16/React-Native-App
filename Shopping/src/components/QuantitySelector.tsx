@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
+import { a11yLabels } from '../constants/accessibility';
 
 interface QuantitySelectorProps {
   quantity: number;
@@ -49,12 +50,19 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
   const currentSize = sizeStyles[size];
 
   return (
-    <View style={[styles.container, { height: currentSize.height }]}>
+    <View
+      style={[styles.container, { height: currentSize.height }]}
+      accessibilityLabel={a11yLabels.updateQuantity(quantity)}
+      accessibilityRole="none"
+    >
       <TouchableOpacity
         style={styles.button}
         onPress={onDecrease}
         disabled={!canDecrease}
         activeOpacity={0.7}
+        accessibilityLabel={a11yLabels.decreaseQuantity}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: !canDecrease }}
       >
         <Icon
           name="remove-outline"
@@ -64,7 +72,12 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
       </TouchableOpacity>
 
       <View style={styles.quantityContainer}>
-        <Text style={[styles.quantity, { fontSize: currentSize.textSize }]}>{quantity}</Text>
+        <Text
+          style={[styles.quantity, { fontSize: currentSize.textSize }]}
+          accessibilityElementsHidden={true}
+        >
+          {quantity}
+        </Text>
       </View>
 
       <TouchableOpacity
@@ -72,6 +85,9 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({
         onPress={onIncrease}
         disabled={!canIncrease}
         activeOpacity={0.7}
+        accessibilityLabel={a11yLabels.increaseQuantity}
+        accessibilityRole="button"
+        accessibilityState={{ disabled: !canIncrease }}
       >
         <Icon
           name="add-outline"

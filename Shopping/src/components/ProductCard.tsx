@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
 import type { Product } from '../index';
 import { useCartStore, useWishlistStore } from '../store';
+import { a11yLabels, a11yRoles, a11yHints } from '../constants/accessibility';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -100,16 +101,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
         onPressOut={handlePressOut}
         activeOpacity={1}
         style={styles.card}
+        accessibilityLabel={`${product.name}. Price: ₹${product.discountPrice.toLocaleString()}. ${product.rating} stars. ${inCart ? 'Already in cart' : ''}`}
+        accessibilityHint={a11yLabels.viewProductDetails}
+        accessibilityRole="button"
       >
-        <View style={styles.imageContainer}>
+        <View style={styles.imageContainer} accessibilityElementsHidden={true} importantForAccessibility="no-hide-descendants">
           <Image
             source={{ uri: product.imageUrl }}
             style={[styles.image, { width: imageSize * 1.2, height: imageSize * 1.6 }]}
+            accessible={true}
+            accessibilityLabel={`Product image for ${product.name}`}
           />
           <TouchableOpacity
             style={[styles.wishlistButton, { width: iconSize + 16, height: iconSize + 16 }]}
             onPress={handleWishlistPress}
             activeOpacity={0.7}
+            accessibilityLabel={inWishlist ? a11yLabels.removeFromWishlist : a11yLabels.addToWishlist}
+            accessibilityRole="button"
           >
             <Animated.View style={{ transform: [{ scale: heartScale }] }}>
               <Icon
@@ -161,6 +169,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
             style={[styles.addButton, inCart ? styles.addButtonInCart : null]}
             onPress={handleAddToCart}
             activeOpacity={0.8}
+            accessibilityLabel={inCart ? 'Add more to cart' : a11yLabels.addToCart}
+            accessibilityHint={inCart ? 'Already in cart' : 'Add this product to your shopping cart'}
+            accessibilityRole="button"
           >
             <Icon
               name={inCart ? 'cart' : 'cart-outline'}
