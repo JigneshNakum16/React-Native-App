@@ -10,6 +10,7 @@ interface CartState {
   clearCart: () => void;
   getCartTotal: () => number;
   getCartCount: () => number;
+  getCartItemsCount: () => number;
   isInCart: (productId: string) => boolean;
   getItemQuantity: (productId: string) => number;
   initializeCart: (products: Product[]) => void;
@@ -105,6 +106,10 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   getCartCount: () => {
     return get().items.reduce((count, item) => count + item.quantity, 0);
+  },
+
+  getCartItemsCount: () => {
+    return get().items.length;
   },
 
   isInCart: (productId: string) => {

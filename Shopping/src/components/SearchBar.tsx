@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   View,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Animated,
 } from 'react-native';
-import { colors } from '../theme/colors';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { colors, spacing, borderRadius } from '../theme/colors';
 
 interface SearchBarProps {
   value: string;
@@ -21,53 +21,31 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   placeholder = 'Search products...',
 }) => {
-  const [fadeAnim] = useState(new Animated.Value(0));
-
-  const handleFocus = () => {
-    if (!value) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-
   const handleClear = () => {
     onChangeText('');
     onClear?.();
   };
 
-  const clearButtonOpacity = value ? 1 : 0;
-
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        <View style={styles.iconContainer}>
-          <View style={styles.searchIcon}>
-            <View style={styles.searchCircle} />
-            <View style={styles.searchLine} />
-          </View>
-        </View>
+        <Icon name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.input}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
           placeholderTextColor={colors.textSecondary}
-          onFocus={handleFocus}
         />
-        <TouchableOpacity
-          style={[styles.clearButton, { opacity: clearButtonOpacity }]}
-          onPress={handleClear}
-          activeOpacity={0.7}
-          disabled={!value}
-        >
-          <View style={styles.clearIcon}>
-            <View style={styles.clearLine1} />
-            <View style={styles.clearLine2} />
-          </View>
-        </TouchableOpacity>
+        {value ? (
+          <TouchableOpacity
+            style={styles.clearButton}
+            onPress={handleClear}
+            activeOpacity={0.7}
+          >
+            <Icon name="close-circle" size={20} color={colors.textSecondary} />
+          </TouchableOpacity>
+        ) : null}
       </View>
     </View>
   );
@@ -75,71 +53,32 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    paddingBottom: 8,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.cardBackground,
-    borderRadius: 12,
-    paddingHorizontal: 12,
+    borderRadius: borderRadius.lg,
+    paddingHorizontal: spacing.md,
     height: 48,
-  },
-  iconContainer: {
-    marginRight: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   searchIcon: {
-    width: 20,
-    height: 20,
-  },
-  searchCircle: {
-    position: 'absolute',
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 2,
-    borderColor: colors.textSecondary,
-    top: 0,
-    left: 0,
-  },
-  searchLine: {
-    position: 'absolute',
-    width: 8,
-    height: 2,
-    backgroundColor: colors.textSecondary,
-    bottom: 2,
-    right: 0,
-    transform: [{ rotate: '45deg' }],
+    marginRight: spacing.sm,
   },
   input: {
     flex: 1,
     fontSize: 16,
     color: colors.text,
     paddingVertical: 0,
+    height: '100%',
   },
   clearButton: {
-    padding: 4,
-  },
-  clearIcon: {
-    width: 16,
-    height: 16,
-  },
-  clearLine1: {
-    position: 'absolute',
-    width: 16,
-    height: 2,
-    backgroundColor: colors.textSecondary,
-    top: 7,
-    transform: [{ rotate: '45deg' }],
-  },
-  clearLine2: {
-    position: 'absolute',
-    width: 16,
-    height: 2,
-    backgroundColor: colors.textSecondary,
-    top: 7,
-    transform: [{ rotate: '-45deg' }],
+    padding: spacing.xs,
+    marginLeft: spacing.xs,
   },
 });
 

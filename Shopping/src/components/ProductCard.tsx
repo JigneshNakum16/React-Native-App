@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
 import type { Product } from '../index';
 import { useCartStore, useWishlistStore } from '../store';
@@ -95,25 +96,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
             activeOpacity={0.7}
           >
             <Animated.View style={{ transform: [{ scale: heartScale }] }}>
-              <View
-                style={[
-                  styles.heartIcon,
-                  inWishlist ? styles.heartIconFilled : null,
-                ]}
-              >
-                <View
-                  style={[
-                    styles.heartLeft,
-                    inWishlist ? styles.heartFilled : null,
-                  ]}
-                />
-                <View
-                  style={[
-                    styles.heartRight,
-                    inWishlist ? styles.heartFilled : null,
-                  ]}
-                />
-              </View>
+              <Icon
+                name={inWishlist ? 'heart' : 'heart-outline'}
+                size={20}
+                color={inWishlist ? colors.heartColor : colors.textSecondary}
+              />
             </Animated.View>
           </TouchableOpacity>
           {product.offerPercentage >= 15 && (
@@ -133,6 +120,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
 
           <View style={styles.ratingContainer}>
             <View style={styles.rating}>
+              <Icon name="star" size={12} color={colors.background} />
               <Text style={styles.ratingText}>{product.rating.toFixed(1)}</Text>
             </View>
             <Text style={styles.ratingCount}>
@@ -156,6 +144,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
             onPress={handleAddToCart}
             activeOpacity={0.8}
           >
+            <Icon
+              name={inCart ? 'cart' : 'cart-outline'}
+              size={16}
+              color={colors.background}
+              style={styles.cartIcon}
+            />
             <Text
               style={[
                 styles.addButtonText,
@@ -173,18 +167,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onPress }) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '48%',
     marginBottom: spacing.md,
   },
   card: {
     backgroundColor: colors.background,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    elevation: 2,
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 8,
   },
   imageContainer: {
     position: 'relative',
@@ -208,54 +201,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 2,
+    elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  heartIcon: {
-    width: 20,
-    height: 20,
-    position: 'relative',
-  },
-  heartLeft: {
-    position: 'absolute',
-    width: 10,
-    height: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: colors.textSecondary,
-    borderRadius: 10,
-    left: 0,
-    top: 2,
-  },
-  heartRight: {
-    position: 'absolute',
-    width: 10,
-    height: 16,
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: colors.textSecondary,
-    borderRadius: 10,
-    right: 0,
-    top: 2,
-  },
-  heartIconFilled: {
-    overflow: 'hidden',
-  },
-  heartFilled: {
-    backgroundColor: colors.heartColor,
-    borderColor: colors.heartColor,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   discountBadge: {
     position: 'absolute',
     top: spacing.sm,
     left: spacing.sm,
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.primary,
     paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
+    paddingVertical: 4,
     borderRadius: borderRadius.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   discountText: {
     color: colors.background,
@@ -266,13 +227,14 @@ const styles = StyleSheet.create({
     color: colors.background,
     fontSize: 8,
     fontWeight: '600',
+    marginLeft: 2,
   },
   content: {
     padding: spacing.sm,
   },
   name: {
     fontSize: fontSize.sm,
-    fontWeight: '500',
+    fontWeight: '600',
     color: colors.text,
     marginBottom: spacing.sm,
     minHeight: 36,
@@ -288,6 +250,9 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: borderRadius.sm,
     marginRight: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
   },
   ratingText: {
     color: colors.background,
@@ -312,14 +277,17 @@ const styles = StyleSheet.create({
   },
   discountPrice: {
     fontSize: fontSize.md,
-    fontWeight: '600',
-    color: colors.text,
+    fontWeight: '700',
+    color: colors.primary,
   },
   addButton: {
     backgroundColor: colors.primary,
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.md,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 6,
   },
   addButtonInCart: {
     backgroundColor: colors.secondary,
@@ -331,6 +299,9 @@ const styles = StyleSheet.create({
   },
   addButtonTextInCart: {
     color: colors.background,
+  },
+  cartIcon: {
+    marginRight: 4,
   },
 });
 

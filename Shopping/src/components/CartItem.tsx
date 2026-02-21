@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Animated,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { colors, spacing, borderRadius, fontSize } from '../theme/colors';
 import { CartItem as CartItemType } from '../store';
 import QuantitySelector from './QuantitySelector';
@@ -46,55 +47,53 @@ const CartItemComponent: React.FC<CartItemProps> = ({
     <Animated.View
       style={[styles.container, { transform: [{ translateX: slideAnim }] }]}
     >
-      <TouchableOpacity
-        style={styles.content}
-        onPress={onPress}
-        activeOpacity={0.7}
-      >
+      <View style={styles.content}>
         <Image source={{ uri: item.imageUrl }} style={styles.image} />
 
         <View style={styles.details}>
-          <Text style={styles.name} numberOfLines={2}>
-            {item.name}
-          </Text>
+          <View style={styles.headerRow}>
+            <Text style={styles.name} numberOfLines={2}>
+              {item.name}
+            </Text>
+            <TouchableOpacity
+              style={styles.removeButton}
+              onPress={handleRemove}
+              activeOpacity={0.7}
+            >
+              <Icon name="close-circle" size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.ratingContainer}>
             <View style={styles.rating}>
+              <Icon name="star" size={10} color={colors.background} />
               <Text style={styles.ratingText}>{item.rating.toFixed(1)}</Text>
             </View>
             <Text style={styles.ratingCount}>({item.ratingCount})</Text>
           </View>
 
-          <View style={styles.priceRow}>
-            <Text style={styles.price}>
-              ₹{item.discountPrice.toLocaleString()}
-            </Text>
-            <Text style={styles.originalPrice}>
-              ₹{item.originalPrice.toLocaleString()}
-            </Text>
-          </View>
+          <View style={styles.priceAndQuantityRow}>
+            <View style={styles.priceContainer}>
+              <Text style={styles.price}>
+                ₹{item.discountPrice.toLocaleString()}
+              </Text>
+              <Text style={styles.originalPrice}>
+                ₹{item.originalPrice.toLocaleString()}
+              </Text>
+            </View>
 
-          <View style={styles.quantityContainer}>
-            <QuantitySelector
-              quantity={item.quantity}
-              onIncrease={() => onUpdateQuantity(item.quantity + 1)}
-              onDecrease={() => onUpdateQuantity(item.quantity - 1)}
-              size="small"
-            />
+            <View style={styles.quantityContainer}>
+              <Text style={styles.quantityLabel}>Qty: </Text>
+              <QuantitySelector
+                quantity={item.quantity}
+                onIncrease={() => onUpdateQuantity(item.quantity + 1)}
+                onDecrease={() => onUpdateQuantity(item.quantity - 1)}
+                size="small"
+              />
+            </View>
           </View>
         </View>
-
-        <TouchableOpacity
-          style={styles.removeButton}
-          onPress={handleRemove}
-          activeOpacity={0.7}
-        >
-          <View style={styles.removeIcon}>
-            <View style={styles.removeLine1} />
-            <View style={styles.removeLine2} />
-          </View>
-        </TouchableOpacity>
-      </TouchableOpacity>
+      </View>
     </Animated.View>
   );
 };
@@ -105,11 +104,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    elevation: 2,
+    elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowRadius: 4,
   },
   content: {
     flexDirection: 'row',
@@ -117,19 +116,29 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   image: {
-    width: 80,
-    height: 100,
+    width: 90,
+    height: 110,
     resizeMode: 'contain',
     marginRight: spacing.md,
   },
   details: {
     flex: 1,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: spacing.xs,
+  },
   name: {
     fontSize: fontSize.sm,
-    fontWeight: '500',
+    fontWeight: '600',
     color: colors.text,
-    marginBottom: spacing.xs,
+    flex: 1,
+    marginRight: spacing.xs,
+  },
+  removeButton: {
+    padding: 2,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -139,9 +148,12 @@ const styles = StyleSheet.create({
   rating: {
     backgroundColor: colors.ratingBackground,
     paddingHorizontal: spacing.xs,
-    paddingVertical: 1,
+    paddingVertical: 2,
     borderRadius: borderRadius.sm,
     marginRight: spacing.xs,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
   },
   ratingText: {
     color: colors.background,
@@ -152,15 +164,18 @@ const styles = StyleSheet.create({
     fontSize: fontSize.xs,
     color: colors.textSecondary,
   },
-  priceRow: {
+  priceAndQuantityRow: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+  },
+  priceContainer: {
+    flex: 1,
   },
   price: {
     fontSize: fontSize.md,
-    fontWeight: '600',
-    color: colors.text,
+    fontWeight: '700',
+    color: colors.primary,
     marginRight: spacing.xs,
   },
   originalPrice: {
@@ -168,34 +183,14 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textDecorationLine: 'line-through',
   },
+  quantityLabel: {
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
+    marginRight: spacing.xs,
+  },
   quantityContainer: {
-    alignSelf: 'flex-start',
-  },
-  removeButton: {
-    padding: spacing.sm,
-    marginLeft: spacing.sm,
-    alignSelf: 'flex-start',
-  },
-  removeIcon: {
-    width: 20,
-    height: 20,
-    position: 'relative',
-  },
-  removeLine1: {
-    position: 'absolute',
-    width: 20,
-    height: 2,
-    backgroundColor: colors.error,
-    top: 9,
-    transform: [{ rotate: '45deg' }],
-  },
-  removeLine2: {
-    position: 'absolute',
-    width: 20,
-    height: 2,
-    backgroundColor: colors.error,
-    top: 9,
-    transform: [{ rotate: '-45deg' }],
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

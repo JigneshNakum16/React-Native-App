@@ -7,10 +7,10 @@ import {
   RefreshControl,
   TouchableOpacity,
   Animated,
-  ScrollView,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { colors, spacing, fontSize } from '../theme/colors';
+import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import type { Product } from '../index';
 import { CATEGORIES, PRODUCTS_LIST } from '../data/contants';
 import ProductCard from '../components/ProductCard';
@@ -23,7 +23,7 @@ type HomeProps = NativeStackScreenProps<any, 'Home'>;
 const Home = ({ navigation }: HomeProps) => {
   const { searchQuery, selectedCategory, setSearchQuery, setSelectedCategory } =
     useFilterStore();
-  const { getCartCount, initializeCart } = useCartStore();
+  const { getCartItemsCount, initializeCart } = useCartStore();
   const { getWishlistCount, initializeWishlist } = useWishlistStore();
 
   const [refreshing, setRefreshing] = React.useState(false);
@@ -55,36 +55,20 @@ const Home = ({ navigation }: HomeProps) => {
     }, 1000);
   };
 
-  const cartCount = getCartCount();
+  const cartCount = getCartItemsCount();
 
   const renderProduct = ({ item }: { item: Product }) => (
-    <ProductCard
-      product={item}
-      onPress={() => (navigation as any).navigate('Details', { product: item })}
-    />
+    <View style={styles.productCardContainer}>
+      <ProductCard
+        product={item}
+        onPress={() => (navigation as any).navigate('Details', { product: item })}
+      />
+    </View>
   );
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <Animated.View
-        style={[
-          styles.emptyIcon,
-          {
-            transform: [
-              {
-                translateY: scrollY.interpolate({
-                  inputRange: [-100, 0],
-                  outputRange: [10, 0],
-                  extrapolate: 'clamp',
-                }),
-              },
-            ],
-          },
-        ]}
-      >
-        <View style={styles.emptyIconCircle} />
-        <View style={styles.emptyIconLine} />
-      </Animated.View>
+      <Icon name="search-outline" size={64} color={colors.border} />
       <Text style={styles.emptyTitle}>No products found</Text>
       <Text style={styles.emptySubtitle}>
         {searchQuery || selectedCategory !== 'All'
@@ -99,6 +83,7 @@ const Home = ({ navigation }: HomeProps) => {
             setSelectedCategory('All');
           }}
         >
+          <Icon name="refresh-outline" size={18} color={colors.background} style={{ marginRight: 6 }} />
           <Text style={styles.clearFiltersText}>Clear Filters</Text>
         </TouchableOpacity>
       )}
@@ -145,7 +130,12 @@ const Home = ({ navigation }: HomeProps) => {
               },
             ]}
           >
-            <Text style={styles.headerTitle}>Shop</Text>
+            <View style={styles.headerTop}>
+              <Text style={styles.headerTitle}>ShopHub</Text>
+              <TouchableOpacity style={styles.notificationButton}>
+                <Icon name="notifications-outline" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
             <SearchBar
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -160,6 +150,9 @@ const Home = ({ navigation }: HomeProps) => {
               <Text style={styles.resultsCount}>
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'Product' : 'Products'}
               </Text>
+              <TouchableOpacity style={styles.filterButton}>
+                <Icon name="options-outline" size={20} color={colors.primary} />
+              </TouchableOpacity>
             </View>
           </Animated.View>
         }
@@ -172,11 +165,9 @@ const Home = ({ navigation }: HomeProps) => {
           onPress={() => (navigation as any).navigate('CartTab')}
           activeOpacity={0.8}
         >
-          <View style={styles.cartIconContainer}>
-            <View style={styles.cartIcon} />
-            <View style={styles.cartBadge}>
-              <Text style={styles.cartBadgeText}>{cartCount}</Text>
-            </View>
+          <Icon name="cart" size={24} color={colors.background} />
+          <View style={styles.cartBadge}>
+            <Text style={styles.cartBadgeText}>{cartCount}</Text>
           </View>
         </TouchableOpacity>
       )}
@@ -193,13 +184,22 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     zIndex: 10,
   },
-  headerTitle: {
-    fontSize: fontSize.xxl,
-    fontWeight: '700',
-    color: colors.text,
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     paddingBottom: spacing.sm,
+  },
+  headerTitle: {
+    fontSize: fontSize.xxl,
+    fontWeight: '800',
+    color: colors.primary,
+    letterSpacing: -0.5,
+  },
+  notificationButton: {
+    padding: spacing.xs,
   },
   listContent: {
     padding: spacing.md,
@@ -216,44 +216,27 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
   resultsCount: {
-    fontSize: fontSize.sm,
-    color: colors.textSecondary,
-    fontWeight: '500',
+    fontSize: fontSize.md,
+    color: colors.text,
+    fontWeight: '600',
+  },
+  filterButton: {
+    padding: spacing.xs,
+  },
+  productCardContainer: {
+    width: '48%',
   },
   emptyState: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: spacing.xxl * 3,
   },
-  emptyIcon: {
-    width: 80,
-    height: 80,
-    marginBottom: spacing.lg,
-  },
-  emptyIconCircle: {
-    position: 'absolute',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 3,
-    borderColor: colors.border,
-    top: 10,
-    left: 10,
-  },
-  emptyIconLine: {
-    position: 'absolute',
-    width: 30,
-    height: 3,
-    backgroundColor: colors.border,
-    top: 35,
-    left: 25,
-    transform: [{ rotate: '45deg' }],
-  },
   emptyTitle: {
     fontSize: fontSize.xl,
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.text,
     marginBottom: spacing.sm,
+    marginTop: spacing.lg,
   },
   emptySubtitle: {
     fontSize: fontSize.md,
@@ -265,7 +248,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
-    borderRadius: 20,
+    borderRadius: borderRadius.round,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   clearFiltersText: {
     color: colors.background,
@@ -274,7 +259,7 @@ const styles = StyleSheet.create({
   },
   floatingCartButton: {
     position: 'absolute',
-    bottom: spacing.xxl,
+    bottom: spacing.xxl + 60,
     right: spacing.md,
     backgroundColor: colors.primary,
     width: 56,
@@ -282,41 +267,30 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-  },
-  cartIconContainer: {
-    width: 24,
-    height: 24,
-  },
-  cartIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: colors.background,
-    borderTopWidth: 0,
-    borderRightWidth: 0,
+    elevation: 6,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   cartBadge: {
     position: 'absolute',
-    top: -6,
-    right: -6,
+    top: -4,
+    right: -4,
     backgroundColor: colors.error,
-    minWidth: 20,
-    height: 20,
-    borderRadius: 10,
+    minWidth: 22,
+    height: 22,
+    borderRadius: 11,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: colors.background,
   },
   cartBadgeText: {
     color: colors.background,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: '700',
-    paddingHorizontal: 4,
+    paddingHorizontal: 5,
   },
 });
 

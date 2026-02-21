@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import { useWishlistStore, useCartStore } from '../store';
 import type { Product } from '../index';
 import { PRODUCTS_LIST } from '../data/contants';
 import ProductCard from '../components/ProductCard';
-import Separator from '../components/Separator';
 
 type WishlistProps = NativeStackScreenProps<any, 'Wishlist'>;
 
@@ -55,32 +55,31 @@ const Wishlist = ({ navigation }: WishlistProps) => {
     );
   };
 
-  const renderProduct = ({ item }: { item: Product }) => (
-    <View style={styles.cardContainer}>
-      <ProductCard
-        product={item}
-        onPress={() => (navigation as any).navigate('Details', { product: item })}
-      />
-      {!isInCart(item.id) && (
-        <TouchableOpacity
-          style={styles.moveToCartButton}
-          onPress={() => handleMoveToCart(item)}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.moveToCartText}>Move to Cart</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+  const renderProduct = ({ item }: { item: Product }) => {
+    const inCart = isInCart(item.id);
+    return (
+      <View style={styles.cardContainer}>
+        <ProductCard
+          product={item}
+          onPress={() => (navigation as any).navigate('Details', { product: item })}
+        />
+        {!inCart && (
+          <TouchableOpacity
+            style={styles.moveToCartButton}
+            onPress={() => handleMoveToCart(item)}
+            activeOpacity={0.8}
+          >
+            <Icon name="cart-outline" size={16} color={colors.background} style={{ marginRight: 6 }} />
+            <Text style={styles.moveToCartText}>Move to Cart</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    );
+  };
 
   const renderEmptyState = () => (
     <View style={styles.emptyState}>
-      <View style={styles.emptyIcon}>
-        <View style={styles.heartOutline}>
-          <View style={styles.heartLeft} />
-          <View style={styles.heartRight} />
-        </View>
-      </View>
+      <Icon name="heart-outline" size={80} color={colors.border} />
       <Text style={styles.emptyTitle}>Your wishlist is empty</Text>
       <Text style={styles.emptySubtitle}>
         Save items you love to your wishlist
@@ -89,6 +88,7 @@ const Wishlist = ({ navigation }: WishlistProps) => {
         style={styles.shopButton}
         onPress={() => (navigation as any).navigate('HomeTab')}
       >
+        <Icon name="compass-outline" size={20} color={colors.background} style={{ marginRight: 8 }} />
         <Text style={styles.shopButtonText}>Explore Products</Text>
       </TouchableOpacity>
     </View>
@@ -109,8 +109,9 @@ const Wishlist = ({ navigation }: WishlistProps) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Wishlist</Text>
-        <TouchableOpacity onPress={handleClearWishlist}>
-          <Text style={styles.clearButtonText}>Clear All</Text>
+        <TouchableOpacity onPress={handleClearWishlist} style={styles.clearButton}>
+          <Icon name="trash-outline" size={20} color={colors.error} />
+          <Text style={styles.clearButtonText}>Clear</Text>
         </TouchableOpacity>
       </View>
 
@@ -121,7 +122,7 @@ const Wishlist = ({ navigation }: WishlistProps) => {
         numColumns={2}
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
-        ItemSeparatorComponent={() => null}
+        ListFooterComponent={<View style={styles.footerSpacer} />}
       />
     </View>
   );
@@ -142,9 +143,14 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   headerTitle: {
-    fontSize: fontSize.xl,
+    fontSize: fontSize.xxl,
     fontWeight: '700',
-    color: colors.text,
+    color: colors.primary,
+  },
+  clearButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   clearButtonText: {
     fontSize: fontSize.md,
@@ -152,7 +158,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   listContent: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
   },
   row: {
     justifyContent: 'space-between',
@@ -167,11 +174,16 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     alignItems: 'center',
     marginTop: spacing.sm,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   moveToCartText: {
     color: colors.background,
     fontSize: fontSize.sm,
     fontWeight: '600',
+  },
+  footerSpacer: {
+    height: 20,
   },
   emptyState: {
     flex: 1,
@@ -179,50 +191,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: spacing.xl,
   },
-  emptyIcon: {
-    width: 100,
-    height: 100,
-    marginBottom: spacing.lg,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  heartOutline: {
-    width: 80,
-    height: 80,
-    position: 'relative',
-  },
-  heartLeft: {
-    position: 'absolute',
-    width: 40,
-    height: 60,
-    backgroundColor: 'transparent',
-    borderWidth: 3,
-    borderColor: colors.border,
-    borderRadius: 40,
-    left: 0,
-    top: 10,
-  },
-  heartRight: {
-    position: 'absolute',
-    width: 40,
-    height: 60,
-    backgroundColor: 'transparent',
-    borderWidth: 3,
-    borderColor: colors.border,
-    borderRadius: 40,
-    right: 0,
-    top: 10,
-  },
   emptyTitle: {
     fontSize: fontSize.xl,
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.text,
     marginBottom: spacing.sm,
+    marginTop: spacing.lg,
   },
   emptySubtitle: {
     fontSize: fontSize.md,
     color: colors.textSecondary,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.xl,
     textAlign: 'center',
   },
   shopButton: {
@@ -230,6 +209,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
     paddingVertical: spacing.md,
     borderRadius: borderRadius.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   shopButtonText: {
     color: colors.background,
