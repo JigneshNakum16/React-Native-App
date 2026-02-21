@@ -11,7 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
-import { useCartStore } from '../store';
+import { useCartStore, type CartItem as CartItemType } from '../store';
 import type { RootStackParamList } from '../index';
 import { PRODUCTS_LIST } from '../data/contants';
 import CartItem from '../components/CartItem';
@@ -87,7 +87,7 @@ const Cart = ({ navigation }: Partial<CartProps>) => {
     </View>
   );
 
-  const renderCartItem = (item: any) => (
+  const renderCartItem = (item: CartItemType) => (
     <CartItem
       key={item.id}
       item={item}
