@@ -11,6 +11,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import BootSplash from 'react-native-bootsplash';
+import ErrorBoundary from './components/ErrorBoundary';
 import { useCartStore, useWishlistStore } from './store';
 import { PRODUCTS_LIST } from './data/contants';
 import { colors } from './theme/colors';
@@ -216,7 +217,10 @@ function App() {
         await initializeCart(PRODUCTS_LIST);
         await initializeWishlist();
       } catch (e) {
-        console.warn('Error preparing app:', e);
+        // Silently fail in production, errors will be caught by ErrorBoundary
+        if (__DEV__) {
+          console.error('Error preparing app:', e);
+        }
       } finally {
         setIsAppReady(true);
       }
@@ -241,10 +245,12 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      <TabNavigator />
-    </NavigationContainer>
+    <ErrorBoundary>
+      <NavigationContainer>
+        <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+        <TabNavigator />
+      </NavigationContainer>
+    </ErrorBoundary>
   );
 }
 

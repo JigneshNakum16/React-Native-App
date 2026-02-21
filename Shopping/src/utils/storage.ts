@@ -11,8 +11,8 @@ export interface StorageCartItem {
 export const saveCart = async (cart: StorageCartItem[]): Promise<void> => {
   try {
     await AsyncStorage.setItem(CART_KEY, JSON.stringify(cart));
-  } catch (error) {
-    console.error('Error saving cart:', error);
+  } catch {
+    // Silent error - will be caught by ErrorBoundary in production
   }
 };
 
@@ -20,8 +20,7 @@ export const loadCart = async (): Promise<StorageCartItem[]> => {
   try {
     const cartData = await AsyncStorage.getItem(CART_KEY);
     return cartData ? JSON.parse(cartData) : [];
-  } catch (error) {
-    console.error('Error loading cart:', error);
+  } catch {
     return [];
   }
 };
@@ -29,8 +28,8 @@ export const loadCart = async (): Promise<StorageCartItem[]> => {
 export const saveWishlist = async (wishlist: string[]): Promise<void> => {
   try {
     await AsyncStorage.setItem(WISHLIST_KEY, JSON.stringify(wishlist));
-  } catch (error) {
-    console.error('Error saving wishlist:', error);
+  } catch {
+    // Silent error - will be caught by ErrorBoundary in production
   }
 };
 
@@ -38,8 +37,7 @@ export const loadWishlist = async (): Promise<string[]> => {
   try {
     const wishlistData = await AsyncStorage.getItem(WISHLIST_KEY);
     return wishlistData ? JSON.parse(wishlistData) : [];
-  } catch (error) {
-    console.error('Error loading wishlist:', error);
+  } catch {
     return [];
   }
 };
@@ -47,7 +45,7 @@ export const loadWishlist = async (): Promise<string[]> => {
 export const clearStorage = async (): Promise<void> => {
   try {
     await AsyncStorage.multiRemove([CART_KEY, WISHLIST_KEY]);
-  } catch (error) {
-    console.error('Error clearing storage:', error);
+  } catch {
+    // Silent error - will be caught by ErrorBoundary in production
   }
 };

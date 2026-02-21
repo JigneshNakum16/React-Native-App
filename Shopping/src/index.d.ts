@@ -21,3 +21,15 @@ export interface Category {
     name: string;
     icon: string;
 }
+
+export type RootStackParamList = {
+  HomeTab: undefined;
+  CartTab: undefined;
+  WishlistTab: undefined;
+  ProfileTab: undefined;
+  Details: { product: Product };
+  Home: undefined;
+  Cart: undefined;
+  Wishlist: undefined;
+  Profile: undefined;
+};

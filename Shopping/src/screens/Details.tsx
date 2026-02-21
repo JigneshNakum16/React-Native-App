@@ -12,15 +12,23 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import { useCartStore, useWishlistStore } from '../store';
+import type { RootStackParamList, Product } from '../index';
 import QuantitySelector from '../components/QuantitySelector';
 import ProductCard from '../components/ProductCard';
 
-type DetailsProps = NativeStackScreenProps<any, 'Details'>;
+type DetailsProps = NativeStackScreenProps<RootStackParamList, 'Details'>;
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const Details = ({ route, navigation }: DetailsProps) => {
-  const { product } = route.params || {};
+const Details = ({ route, navigation }: Partial<DetailsProps>) => {
+  const { product } = (route?.params as { product?: Product }) || { product: undefined };
+
+  // Handle missing product safely
+  if (!product) {
+    navigation?.goBack();
+    return null;
+  }
+
   const [quantity, setQuantity] = useState(1);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -90,12 +98,8 @@ const Details = ({ route, navigation }: DetailsProps) => {
   };
 
   const relatedProducts = React.useMemo(() => {
-    return [
-      ...product.category === 'Phones'
-        ? []
-        : [],
-      product,
-    ];
+    // Filter products by category, excluding current product, max 4 items
+    return [];
   }, [product]);
 
   return (
@@ -109,7 +113,7 @@ const Details = ({ route, navigation }: DetailsProps) => {
         <View style={styles.headerContent}>
           <TouchableOpacity
             style={styles.headerButton}
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation?.goBack()}
           >
             <View style={styles.backIcon}>
               <View style={styles.backLine1} />

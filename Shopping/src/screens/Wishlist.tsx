@@ -11,13 +11,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import { useWishlistStore, useCartStore } from '../store';
-import type { Product } from '../index';
+import type { Product, RootStackParamList } from '../index';
 import { PRODUCTS_LIST } from '../data/contants';
 import ProductCard from '../components/ProductCard';
 
-type WishlistProps = NativeStackScreenProps<any, 'Wishlist'>;
+type WishlistProps = NativeStackScreenProps<RootStackParamList, 'Wishlist'>;
 
-const Wishlist = ({ navigation }: WishlistProps) => {
+const Wishlist = ({ navigation }: Partial<WishlistProps>) => {
   const { items, removeFromWishlist, clearWishlist, initializeWishlist } =
     useWishlistStore();
   const { addItem, isInCart } = useCartStore();
@@ -61,7 +61,7 @@ const Wishlist = ({ navigation }: WishlistProps) => {
       <View style={styles.cardContainer}>
         <ProductCard
           product={item}
-          onPress={() => (navigation as any).navigate('Details', { product: item })}
+          onPress={() => navigation?.navigate('Details', { product: item })}
         />
         {!inCart && (
           <TouchableOpacity
@@ -86,7 +86,7 @@ const Wishlist = ({ navigation }: WishlistProps) => {
       </Text>
       <TouchableOpacity
         style={styles.shopButton}
-        onPress={() => (navigation as any).navigate('HomeTab')}
+        onPress={() => navigation?.getParent()?.navigate('HomeTab')}
       >
         <Icon name="compass-outline" size={20} color={colors.background} style={{ marginRight: 8 }} />
         <Text style={styles.shopButtonText}>Explore Products</Text>

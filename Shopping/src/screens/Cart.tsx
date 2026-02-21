@@ -12,12 +12,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import { useCartStore } from '../store';
+import type { RootStackParamList } from '../index';
 import { PRODUCTS_LIST } from '../data/contants';
 import CartItem from '../components/CartItem';
 
-type CartProps = NativeStackScreenProps<any, 'Cart'>;
+type CartProps = NativeStackScreenProps<RootStackParamList, 'Cart'>;
 
-const Cart = ({ navigation }: CartProps) => {
+const Cart = ({ navigation }: Partial<CartProps>) => {
   const {
     items,
     updateQuantity,
@@ -51,7 +52,7 @@ const Cart = ({ navigation }: CartProps) => {
   const handleDone = () => {
     setShowSuccessModal(false);
     clearCart();
-    navigation.navigate('HomeTab');
+    navigation?.getParent()?.navigate('HomeTab');
   };
 
   const handleClearCart = () => {
@@ -78,7 +79,7 @@ const Cart = ({ navigation }: CartProps) => {
       </Text>
       <TouchableOpacity
         style={styles.shopButton}
-        onPress={() => (navigation as any).navigate('HomeTab')}
+        onPress={() => navigation?.getParent()?.navigate('HomeTab')}
       >
         <Icon name="bag-handle-outline" size={20} color={colors.background} style={{ marginRight: 8 }} />
         <Text style={styles.shopButtonText}>Start Shopping</Text>
@@ -92,7 +93,7 @@ const Cart = ({ navigation }: CartProps) => {
       item={item}
       onUpdateQuantity={(quantity) => updateQuantity(item.id, quantity)}
       onRemove={() => removeItem(item.id)}
-      onPress={() => (navigation as any).navigate('Details', { product: item })}
+      onPress={() => navigation?.navigate('Details', { product: item })}
     />
   );
 

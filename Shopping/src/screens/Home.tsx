@@ -12,7 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
-import type { Product } from '../index';
+import type { Product, RootStackParamList } from '../index';
 import { CATEGORIES, PRODUCTS_LIST } from '../data/contants';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
@@ -21,9 +21,9 @@ import { useFilterStore, useCartStore, useWishlistStore } from '../store';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-type HomeProps = NativeStackScreenProps<any, 'Home'>;
+type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-const Home = ({ navigation }: HomeProps) => {
+const Home = ({ navigation }: Partial<HomeProps>) => {
   const { searchQuery, selectedCategory, setSearchQuery, setSelectedCategory } =
     useFilterStore();
   const { getCartItemsCount, initializeCart } = useCartStore();
@@ -70,7 +70,7 @@ const Home = ({ navigation }: HomeProps) => {
     <View style={[styles.productCardContainer, { width: cardWidth }]}>
       <ProductCard
         product={item}
-        onPress={() => (navigation as any).navigate('Details', { product: item })}
+        onPress={() => navigation?.navigate('Details', { product: item })}
       />
     </View>
   );
@@ -177,7 +177,7 @@ const Home = ({ navigation }: HomeProps) => {
       {cartCount > 0 && (
         <TouchableOpacity
           style={[styles.floatingCartButton, { bottom: isSmallDevice ? 70 : 80 }]}
-          onPress={() => (navigation as any).navigate('CartTab')}
+          onPress={() => navigation?.getParent()?.navigate('CartTab')}
           activeOpacity={0.8}
         >
           <Icon name="cart" size={isSmallDevice ? 22 : 24} color={colors.background} />

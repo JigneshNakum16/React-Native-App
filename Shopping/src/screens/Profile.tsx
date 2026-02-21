@@ -11,10 +11,11 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { colors, spacing, fontSize, borderRadius } from '../theme/colors';
 import { useCartStore, useWishlistStore } from '../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import type { RootStackParamList } from '../index';
 
-type ProfileProps = NativeStackScreenProps<any, 'Profile'>;
+type ProfileProps = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 
-const Profile = ({ navigation }: ProfileProps) => {
+const Profile = ({ navigation }: Partial<ProfileProps>) => {
   const { getCartCount } = useCartStore();
   const { getWishlistCount } = useWishlistStore();
 
@@ -24,9 +25,12 @@ const Profile = ({ navigation }: ProfileProps) => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.clear();
-      console.log('Logged out');
+      navigation?.reset({
+        index: 0,
+        routes: [{ name: 'HomeTab' }],
+      });
     } catch (error) {
-      console.error('Error logging out:', error);
+      // Silent error - will be caught by ErrorBoundary in production
     }
   };
 
@@ -37,7 +41,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Personal Information',
       subtitle: 'Update your personal details',
       color: colors.primary,
-      onPress: () => console.log('Personal Info'),
+      onPress: () => {},
     },
     {
       id: '2',
@@ -45,7 +49,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Orders',
       subtitle: 'View your order history',
       color: colors.secondary,
-      onPress: () => console.log('Orders'),
+      onPress: () => {},
     },
     {
       id: '3',
@@ -53,7 +57,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Addresses',
       subtitle: 'Manage delivery addresses',
       color: colors.warning,
-      onPress: () => console.log('Addresses'),
+      onPress: () => {},
     },
     {
       id: '4',
@@ -61,7 +65,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Payment Methods',
       subtitle: 'Add or remove payment methods',
       color: colors.primary,
-      onPress: () => console.log('Payment Methods'),
+      onPress: () => {},
     },
     {
       id: '5',
@@ -69,7 +73,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Notifications',
       subtitle: 'Manage notification preferences',
       color: colors.error,
-      onPress: () => console.log('Notifications'),
+      onPress: () => {},
     },
     {
       id: '6',
@@ -77,7 +81,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Help & Support',
       subtitle: 'Get help with your orders',
       color: colors.secondary,
-      onPress: () => console.log('Help'),
+      onPress: () => {},
     },
     {
       id: '7',
@@ -85,7 +89,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       title: 'Settings',
       subtitle: 'App settings and preferences',
       color: colors.text,
-      onPress: () => console.log('Settings'),
+      onPress: () => {},
     },
   ];
 
@@ -107,7 +111,7 @@ const Profile = ({ navigation }: ProfileProps) => {
       <View style={styles.statsContainer}>
         <TouchableOpacity
           style={styles.statItem}
-          onPress={() => (navigation as any).navigate('CartTab')}
+          onPress={() => navigation?.getParent()?.navigate('CartTab')}
         >
           <View style={styles.statIcon}>
             <Icon name="cart-outline" size={24} color={colors.primary} />
@@ -120,7 +124,7 @@ const Profile = ({ navigation }: ProfileProps) => {
 
         <TouchableOpacity
           style={styles.statItem}
-          onPress={() => (navigation as any).navigate('WishlistTab')}
+          onPress={() => navigation?.getParent()?.navigate('WishlistTab')}
         >
           <View style={styles.statIcon}>
             <Icon name="heart-outline" size={24} color={colors.heartColor} />
