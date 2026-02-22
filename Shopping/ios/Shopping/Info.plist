@@ -56,5 +56,11 @@
 	<array>
 		<string>Ionicons.ttf</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>We need camera access to let you take photos for your profile</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need photo library access to let you choose images for your profile</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need permission to save images to your photo library</string>
 </dict>
 </plist>

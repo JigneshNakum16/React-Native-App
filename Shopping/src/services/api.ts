@@ -5,14 +5,13 @@
 
 import { logger } from '../utils/logger';
 import { safeFetch, fetchWithRetry } from '../utils/network';
+import { config } from '../config/env';
 
-// API Configuration
+// API Configuration from environment
 const API_CONFIG = {
-  baseURL: __DEV__
-    ? 'https://api-dev.shophub.com' // Dev API
-    : 'https://api.shophub.com',    // Production API
-  timeout: 10000,
-  retryAttempts: 3,
+  baseURL: config.api.baseURL,
+  timeout: config.api.timeout,
+  retryAttempts: config.api.retryAttempts,
 };
 
 // API Endpoints
