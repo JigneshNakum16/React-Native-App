@@ -5,25 +5,20 @@
  * @format
  */
 
-import { StatusBar, StyleSheet } from 'react-native';
-import {
-  SafeAreaProvider,
-} from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AppwriteProvider } from './appwrite/AppwriteContext';
+import Router from './routes/Router';
 
 function App() {
-
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="dark-content" />
+      <AppwriteProvider>
+        <StatusBar barStyle="dark-content" />
+        <Router />
+      </AppwriteProvider>
     </SafeAreaProvider>
   );
 }
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default App;
